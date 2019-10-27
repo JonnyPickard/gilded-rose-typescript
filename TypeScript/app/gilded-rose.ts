@@ -11,9 +11,9 @@ export class Item {
 }
 
 export class GildedRose {
-  items: Array<Item>;
+  items: Item[];
 
-  constructor(items = [] as Array<Item>) {
+  constructor(items = [] as Item[]) {
     this.items = items;
   }
 
