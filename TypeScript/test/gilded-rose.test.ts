@@ -144,7 +144,7 @@ describe("Gilded Rose", () => {
     });
 
     describe("Conjured item type", () => {
-      it.only("should degrade in quality by 2", () => {
+      it("should degrade in quality by 2", () => {
         const gildedRose = new GildedRose([conjuredItem]);
 
         const items = gildedRose.updateQuality();
