@@ -1,4 +1,5 @@
 import { Item } from "./item";
+import { AGED_BRIE, SULFURAS, BACKSTAGE_PASS } from "./itemTypes";
 
 const updateAddOne = (item: Item) => {
   if (item.quality < 50) {
@@ -6,7 +7,13 @@ const updateAddOne = (item: Item) => {
   }
 };
 
-const updateBackstagePassPositive = (item: Item) => {
+const updateDecreaseOne = (item: Item) => {
+  if (item.quality > 0) {
+    item.quality -= 1;
+  }
+};
+
+const updateIncrementBackstagePass = (item: Item) => {
   const { sellIn } = item;
 
   if (sellIn < 11) {
@@ -18,16 +25,8 @@ const updateBackstagePassPositive = (item: Item) => {
   }
 };
 
-const updateAgedBrie = (item: Item) => {
-  updateAddOne(item);
-};
-
-const updateBackstagePassNegative = (item: Item) => {
+const updateFloorBackstagePass = (item: Item) => {
   item.quality = 0;
-};
-
-const updateDefaultItem = (item: Item) => {
-  item.quality -= 1;
 };
 
 export class GildedRose {
@@ -42,54 +41,37 @@ export class GildedRose {
       const item = this.items[i];
       const { name } = item;
 
+      if (name === SULFURAS) {
+        continue;
+      }
+
       switch (name) {
-        case "Aged Brie":
+        case AGED_BRIE:
+          updateAddOne(item);
           break;
-        case "Backstage passes to a TAFKAL80ETC concert":
-          updateBackstagePassPositive(item);
+        case BACKSTAGE_PASS:
+          updateAddOne(item);
+          updateIncrementBackstagePass(item);
           break;
-        case "Sulfuras, Hand of Ragnaros":
-          break;
-
         default:
+          updateDecreaseOne(item);
           break;
       }
 
-      // Pre sell in
-      if (
-        name !== "Aged Brie" &&
-        name !== "Backstage passes to a TAFKAL80ETC concert"
-      ) {
-        if (item.quality > 0) {
-          if (name !== "Sulfuras, Hand of Ragnaros") {
-            updateDefaultItem(item); // not b, bs || sulf
-          }
-        }
-      } else {
-        // b, bs + sulf
-        updateAddOne(item);
-      }
-
-      // All items bar sulfuras Sell in
-      if (name !== "Sulfuras, Hand of Ragnaros") {
-        item.sellIn -= 1;
-      }
+      item.sellIn -= 1;
 
       // Post sell in change
-      // All items bar sulfuras - past sell in date
       if (item.sellIn < 0) {
-        if (name === "Aged Brie") {
-          updateAgedBrie(item);
-        } else {
-          if (name === "Backstage passes to a TAFKAL80ETC concert") {
-            updateBackstagePassNegative(item);
-          } else {
-            if (item.quality > 0) {
-              if (name !== "Sulfuras, Hand of Ragnaros") {
-                updateDefaultItem(item);
-              }
-            }
-          }
+        switch (name) {
+          case AGED_BRIE:
+            updateAddOne(item);
+            break;
+          case BACKSTAGE_PASS:
+            updateFloorBackstagePass(item);
+            break;
+          default:
+            updateDecreaseOne(item);
+            break;
         }
       }
     }
