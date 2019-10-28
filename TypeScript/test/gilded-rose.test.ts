@@ -143,6 +143,16 @@ describe("Gilded Rose", () => {
       });
     });
 
+    describe("Conjured item type", () => {
+      it.only("should degrade in quality by 2", () => {
+        const gildedRose = new GildedRose([conjuredItem]);
+
+        const items = gildedRose.updateQuality();
+
+        expect(items[0].quality).toBe(4);
+      });
+    });
+
     describe("All item types", () => {
       it("should never have a negative quality value", () => {
         const gildedRose = new GildedRose([
