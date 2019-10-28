@@ -1,4 +1,10 @@
 import { Item, GildedRose } from "../app/gilded-rose";
+import {
+  CONJURED,
+  BACKSTAGE_PASS,
+  AGED_BRIE,
+  SULFURAS
+} from "../app/gilded-rose/item-types";
 
 describe("Gilded Rose", () => {
   describe("#updateQuality", () => {
@@ -11,19 +17,11 @@ describe("Gilded Rose", () => {
 
     beforeEach(() => {
       item = new Item("foo", 2, 10);
-      agedBrieItem = new Item("Aged Brie", 0, 0);
-      sulfurasItem = new Item("Sulfuras, Hand of Ragnaros", 0, 80);
-      backstagePassItem = new Item(
-        "Backstage passes to a TAFKAL80ETC concert",
-        11,
-        20
-      );
-      backstagePassItem5DaysLeft = new Item(
-        "Backstage passes to a TAFKAL80ETC concert",
-        5,
-        20
-      );
-      conjuredItem = new Item("Conjured Mana Cake", 3, 6);
+      agedBrieItem = new Item(AGED_BRIE, 0, 0);
+      sulfurasItem = new Item(SULFURAS, 0, 80);
+      backstagePassItem = new Item(BACKSTAGE_PASS, 11, 20);
+      backstagePassItem5DaysLeft = new Item(BACKSTAGE_PASS, 5, 20);
+      conjuredItem = new Item(CONJURED, 1, 10);
     });
 
     describe("Regular item type", () => {
@@ -116,7 +114,7 @@ describe("Gilded Rose", () => {
         expect(items[0].quality).toBe(27);
       });
 
-      it("should increase in quality by 3 when there are 5 days left", () => {
+      it("should increase in quality by 3 when there are or less days left", () => {
         const gildedRose = new GildedRose([backstagePassItem5DaysLeft]);
 
         // Starts at 20
@@ -144,10 +142,19 @@ describe("Gilded Rose", () => {
     });
 
     describe("Conjured item type", () => {
-      it("should degrade in quality by 2", () => {
+      it("should degrade in quality by 2 when there are days left", () => {
         const gildedRose = new GildedRose([conjuredItem]);
 
         const items = gildedRose.updateQuality();
+
+        expect(items[0].quality).toBe(8);
+      });
+
+      it("should degrade in quality by 4 when there are 0 days left", () => {
+        const gildedRose = new GildedRose([conjuredItem]);
+
+        const items = gildedRose.updateQuality();
+        gildedRose.updateQuality(); // 8
 
         expect(items[0].quality).toBe(4);
       });

@@ -27,3 +27,8 @@ export const updateBackstagePass = (item: Item) => {
     updateAddOne(item);
   }
 };
+
+export const updateConjuredItem = (item: Item) => {
+  updateDecreaseOne(item);
+  updateDecreaseOne(item);
+};

@@ -1,10 +1,11 @@
-import { AGED_BRIE, SULFURAS, BACKSTAGE_PASS } from "./itemTypes";
+import { AGED_BRIE, SULFURAS, BACKSTAGE_PASS, CONJURED } from "./item-types";
 import { Item } from "./item";
 import {
   updateAddOne,
   updateBackstagePass,
   updateDecreaseOne,
-  updateFloorItem
+  updateFloorItem,
+  updateConjuredItem
 } from "./helpers";
 
 export class GildedRose {
@@ -30,6 +31,9 @@ export class GildedRose {
         case BACKSTAGE_PASS:
           updateBackstagePass(item);
           break;
+        case CONJURED:
+          updateConjuredItem(item);
+          break;
         default:
           updateDecreaseOne(item);
           break;
@@ -46,6 +50,9 @@ export class GildedRose {
             break;
           case BACKSTAGE_PASS:
             updateFloorItem(item);
+            break;
+          case CONJURED:
+            updateConjuredItem(item);
             break;
           default:
             updateDecreaseOne(item);
