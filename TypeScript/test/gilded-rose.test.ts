@@ -6,6 +6,7 @@ describe("Gilded Rose", () => {
     let agedBrieItem: Item;
     let sulfurasItem: Item;
     let backstagePassItem: Item;
+    let backstagePassItem5DaysLeft: Item;
     let conjuredItem: Item;
 
     beforeEach(() => {
@@ -14,7 +15,12 @@ describe("Gilded Rose", () => {
       sulfurasItem = new Item("Sulfuras, Hand of Ragnaros", 0, 80);
       backstagePassItem = new Item(
         "Backstage passes to a TAFKAL80ETC concert",
-        15,
+        11,
+        20
+      );
+      backstagePassItem5DaysLeft = new Item(
+        "Backstage passes to a TAFKAL80ETC concert",
+        5,
         20
       );
       conjuredItem = new Item("Conjured Mana Cake", 3, 6);
@@ -78,6 +84,62 @@ describe("Gilded Rose", () => {
             expect(item.quality).toBe(80);
           }
         }
+      });
+    });
+
+    describe("Backstage pass item type", () => {
+      it("should increase in quality by 1 when there are more than 10 days left", () => {
+        const gildedRose = new GildedRose([backstagePassItem]);
+
+        const items = gildedRose.updateQuality();
+
+        // Example of using snapshot to show days left + quality
+        expect(items[0]).toMatchInlineSnapshot(`
+          Item {
+            "name": "Backstage passes to a TAFKAL80ETC concert",
+            "quality": 21,
+            "sellIn": 10,
+          }
+        `);
+      });
+
+      it("should increase in quality by 2 when there are 10 days left", () => {
+        const gildedRose = new GildedRose([backstagePassItem]);
+
+        // Qual starts at 20
+        const items = gildedRose.updateQuality(); // + 1
+
+        gildedRose.updateQuality(); // + 2
+        gildedRose.updateQuality(); // + 2
+        gildedRose.updateQuality(); // + 2
+
+        expect(items[0].quality).toBe(27);
+      });
+
+      it("should increase in quality by 3 when there are 5 days left", () => {
+        const gildedRose = new GildedRose([backstagePassItem5DaysLeft]);
+
+        // Starts at 20
+        const items = gildedRose.updateQuality(); // + 3
+
+        gildedRose.updateQuality(); // + 3
+        gildedRose.updateQuality(); // + 3
+        gildedRose.updateQuality(); // + 3
+
+        expect(items[0].quality).toBe(32);
+      });
+
+      it("should decrease to a quality of 0 after the concert", () => {
+        const gildedRose = new GildedRose([backstagePassItem5DaysLeft]);
+
+        // Starts at 20
+        const items = gildedRose.updateQuality(); // + 3
+
+        [...Array(5)].forEach(() => {
+          gildedRose.updateQuality();
+        });
+
+        expect(items[0].quality).toBe(0);
       });
     });
 
