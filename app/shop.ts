@@ -8,7 +8,7 @@ import {
   updateConjuredItem
 } from "./helpers";
 
-export class GildedRose {
+export class Shop {
   items: Item[];
 
   constructor(items = [] as Item[]) {

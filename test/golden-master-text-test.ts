@@ -1,4 +1,4 @@
-import { Item, GildedRose } from "../app/gilded-rose";
+import { Item, Shop } from "../app";
 
 const items = [
   new Item("+5 Dexterity Vest", 10, 20), //
@@ -13,7 +13,7 @@ const items = [
   new Item("Conjured Mana Cake", 3, 6)
 ];
 
-const gildedRose = new GildedRose(items);
+const gildedRose = new Shop(items);
 var days: number = 2;
 for (let i = 0; i < days; i++) {
   console.log("-------- day " + i + " --------");
