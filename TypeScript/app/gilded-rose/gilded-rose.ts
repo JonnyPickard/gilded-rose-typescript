@@ -13,20 +13,20 @@ const updateDecreaseOne = (item: Item) => {
   }
 };
 
-const updateIncrementBackstagePass = (item: Item) => {
-  const { sellIn } = item;
+const updateBackstagePass = (item: Item) => {
+  updateAddOne(item);
 
-  if (sellIn < 11) {
+  if (item.sellIn < 11) {
     updateAddOne(item);
   }
 
-  if (sellIn < 6) {
+  if (item.sellIn < 6) {
     updateAddOne(item);
   }
-};
 
-const updateFloorBackstagePass = (item: Item) => {
-  item.quality = 0;
+  if (item.sellIn < 0) {
+    item.quality = 0;
+  }
 };
 
 export class GildedRose {
@@ -39,19 +39,17 @@ export class GildedRose {
   updateQuality() {
     for (let i = 0; i < this.items.length; i++) {
       const item = this.items[i];
-      const { name } = item;
 
-      if (name === SULFURAS) {
+      if (item.name === SULFURAS) {
         continue;
       }
 
-      switch (name) {
+      switch (item.name) {
         case AGED_BRIE:
           updateAddOne(item);
           break;
         case BACKSTAGE_PASS:
-          updateAddOne(item);
-          updateIncrementBackstagePass(item);
+          updateBackstagePass(item);
           break;
         default:
           updateDecreaseOne(item);
@@ -62,12 +60,12 @@ export class GildedRose {
 
       // Post sell in change
       if (item.sellIn < 0) {
-        switch (name) {
+        switch (item.name) {
           case AGED_BRIE:
             updateAddOne(item);
             break;
           case BACKSTAGE_PASS:
-            updateFloorBackstagePass(item);
+            updateBackstagePass(item);
             break;
           default:
             updateDecreaseOne(item);
