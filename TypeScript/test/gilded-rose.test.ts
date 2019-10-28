@@ -206,5 +206,15 @@ describe("Gilded Rose", () => {
         }
       });
     });
+
+    describe("No items", () => {
+      it("should return an empty array by default", () => {
+        const gildedRose = new GildedRose();
+
+        const items = gildedRose.updateQuality();
+
+        expect(items).toEqual([]);
+      });
+    });
   });
 });
