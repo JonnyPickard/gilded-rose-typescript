@@ -1,33 +1,11 @@
-import { Item } from "./item";
 import { AGED_BRIE, SULFURAS, BACKSTAGE_PASS } from "./itemTypes";
-
-const updateAddOne = (item: Item) => {
-  if (item.quality < 50) {
-    item.quality += 1;
-  }
-};
-
-const updateDecreaseOne = (item: Item) => {
-  if (item.quality > 0) {
-    item.quality -= 1;
-  }
-};
-
-const updateBackstagePass = (item: Item) => {
-  updateAddOne(item);
-
-  if (item.sellIn < 11) {
-    updateAddOne(item);
-  }
-
-  if (item.sellIn < 6) {
-    updateAddOne(item);
-  }
-
-  if (item.sellIn < 0) {
-    item.quality = 0;
-  }
-};
+import { Item } from "./item";
+import {
+  updateAddOne,
+  updateBackstagePass,
+  updateDecreaseOne,
+  updateFloorItem
+} from "./helpers";
 
 export class GildedRose {
   items: Item[];
@@ -44,6 +22,7 @@ export class GildedRose {
         continue;
       }
 
+      // Standard item logic
       switch (item.name) {
         case AGED_BRIE:
           updateAddOne(item);
@@ -56,16 +35,17 @@ export class GildedRose {
           break;
       }
 
+      // End of day
       item.sellIn -= 1;
 
-      // Post sell in change
+      // Expired item logic
       if (item.sellIn < 0) {
         switch (item.name) {
           case AGED_BRIE:
             updateAddOne(item);
             break;
           case BACKSTAGE_PASS:
-            updateBackstagePass(item);
+            updateFloorItem(item);
             break;
           default:
             updateDecreaseOne(item);

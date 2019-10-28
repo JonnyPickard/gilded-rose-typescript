@@ -103,7 +103,7 @@ describe("Gilded Rose", () => {
         `);
       });
 
-      it("should increase in quality by 2 when there are 10 days left", () => {
+      it("should increase in quality by 2 when there are 10 - 6 days left", () => {
         const gildedRose = new GildedRose([backstagePassItem]);
 
         // Qual starts at 20
